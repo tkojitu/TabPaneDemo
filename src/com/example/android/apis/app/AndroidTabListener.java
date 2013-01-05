@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.tabpanedemo;
+/*
+ * copied from android-sdk/samples/android-17/ApiDemos/src/com/example/android/apis/app/FragmentTabs.java
+ */
+package com.example.android.apis.app;
 
 import android.app.ActionBar;
 import android.app.Activity;
