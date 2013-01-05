@@ -1,15 +1,20 @@
 package com.example.tabpanedemo;
 
+import java.util.HashSet;
+
 import com.example.android.apis.app.AndroidTabListener;
 
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
+import android.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class TabPaneDemo extends Activity {
+    HashSet<AndroidTabListener<TabPane>> listeners = new  HashSet<AndroidTabListener<TabPane>>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +30,10 @@ public class TabPaneDemo extends Activity {
         String title = "Tab-" + count;
         Tab tab = bar.newTab();
         tab.setText(title);
-        tab.setTabListener(new AndroidTabListener<TabPane>(this, title, TabPane.class));
+        AndroidTabListener<TabPane> listener =
+                new AndroidTabListener<TabPane>(this, title, TabPane.class);
+        listeners.add(listener);
+        tab.setTabListener(listener);
         bar.addTab(tab);
     }
 
@@ -34,6 +42,23 @@ public class TabPaneDemo extends Activity {
         if (bar.getTabCount() > 0) {
             bar.removeTabAt(bar.getTabCount() - 1);
         }
+    }
+
+    private void showHide() {
+        ActionBar bar = getActionBar();
+        Tab tab = bar.getSelectedTab();
+        TabPane pane = findTabPane(tab);
+        pane.showHideFindPane();
+    }
+
+    private TabPane findTabPane(Tab tab) {
+        for (AndroidTabListener<TabPane> listener : listeners) {
+            Fragment frag = listener.getFragment(tab);
+            if (frag != null) {
+                return (TabPane) frag;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -51,6 +76,8 @@ public class TabPaneDemo extends Activity {
         case R.id.menu_remove:
             removeTab();
             return true;
+        case R.id.menu_show_hide:
+            showHide();
         default:
             return super.onOptionsItemSelected(item);
         }

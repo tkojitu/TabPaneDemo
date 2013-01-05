@@ -10,5 +10,6 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="Remove"/>
+    <item android:id="@+id/menu_show_hide" android:title="Show/Hide" android:orderInCategory="100" android:showAsAction="never"></item>
     
 </menu>
