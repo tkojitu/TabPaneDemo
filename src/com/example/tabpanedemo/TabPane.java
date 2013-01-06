@@ -10,9 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class TabPane extends Fragment {
-    private TopFrag top;
-    private BottomFrag bottom;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -25,17 +22,21 @@ public class TabPane extends Fragment {
         FragmentManager mgr = getChildFragmentManager();
         FragmentTransaction tx = mgr.beginTransaction();
         if (mgr.findFragmentByTag("top") == null) {
-            top = (TopFrag) Fragment.instantiate(getActivity(), TopFrag.class.getName());
+            Fragment top = Fragment.instantiate(getActivity(), TopFrag.class.getName());
             tx.add(R.id.tab_layout, top, "top");
         }
         if (mgr.findFragmentByTag("bottom") == null) {
-            bottom = (BottomFrag) Fragment.instantiate(getActivity(), BottomFrag.class.getName());
+            Fragment bottom = Fragment.instantiate(getActivity(), BottomFrag.class.getName());
             tx.add(R.id.tab_layout, bottom, "bottom");
         }
         tx.commit();
     }
 
     public void showHideFindPane() {
+        Fragment bottom = getChildFragmentManager().findFragmentByTag("bottom");
+        if (bottom == null) {
+            return;
+        }
         if (bottom.isHidden()) {
             getChildFragmentManager().beginTransaction().show(bottom).commit();
         } else {

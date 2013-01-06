@@ -33,7 +33,6 @@ public class AndroidTabListener<T extends Fragment> implements ActionBar.TabList
     private final Class<T> mClass;
     private final Bundle mArgs;
     private Fragment mFragment;
-    private Tab mTab;
 
     public AndroidTabListener(Activity activity, String tag, Class<T> clz) {
         this(activity, tag, clz, null);
@@ -57,7 +56,6 @@ public class AndroidTabListener<T extends Fragment> implements ActionBar.TabList
     }
 
     public void onTabSelected(Tab tab, FragmentTransaction ft) {
-        mTab = tab;
         if (mFragment == null) {
             mFragment = Fragment.instantiate(mActivity, mClass.getName(), mArgs);
             ft.add(android.R.id.content, mFragment, mTag);
@@ -74,12 +72,5 @@ public class AndroidTabListener<T extends Fragment> implements ActionBar.TabList
 
     public void onTabReselected(Tab tab, FragmentTransaction ft) {
         Toast.makeText(mActivity, "Reselected!", Toast.LENGTH_SHORT).show();
-    }
-
-    public Fragment getFragment(Tab tab) {
-        if (mTab == tab) {
-            return mFragment;
-        }
-        return null;
     }
 }

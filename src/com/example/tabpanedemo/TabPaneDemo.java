@@ -9,10 +9,12 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class TabPaneDemo extends Activity {
+    int count;
     HashSet<AndroidTabListener<TabPane>> listeners = new  HashSet<AndroidTabListener<TabPane>>();
 
     @Override
@@ -26,8 +28,7 @@ public class TabPaneDemo extends Activity {
 
     private void addTab() {
         ActionBar bar = getActionBar();
-        int count = bar.getTabCount();
-        String title = "Tab-" + count;
+        String title = "Tab-" + count++;
         Tab tab = bar.newTab();
         tab.setText(title);
         AndroidTabListener<TabPane> listener =
@@ -45,17 +46,16 @@ public class TabPaneDemo extends Activity {
     }
 
     private void showHide() {
-        ActionBar bar = getActionBar();
-        Tab tab = bar.getSelectedTab();
-        TabPane pane = findTabPane(tab);
+        TabPane pane = (TabPane) findVisibleFragment();
         pane.showHideFindPane();
     }
 
-    private TabPane findTabPane(Tab tab) {
-        for (AndroidTabListener<TabPane> listener : listeners) {
-            Fragment frag = listener.getFragment(tab);
-            if (frag != null) {
-                return (TabPane) frag;
+    private Fragment findVisibleFragment() {
+        FragmentManager mgr = getFragmentManager();
+        for (int i = 0; i < count; ++i) {
+            Fragment frag = mgr.findFragmentByTag("Tab-" + i);
+            if (frag != null && frag.isVisible()) {
+                return frag;
             }
         }
         return null;
