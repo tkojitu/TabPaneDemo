@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class TabPane extends Fragment {
-    private TopFrag top = new TopFrag();
-    private BottomFrag bottom = new BottomFrag();
+    private TopFrag top;
+    private BottomFrag bottom;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -25,9 +25,11 @@ public class TabPane extends Fragment {
         FragmentManager mgr = getChildFragmentManager();
         FragmentTransaction tx = mgr.beginTransaction();
         if (mgr.findFragmentByTag("top") == null) {
+            top = (TopFrag) Fragment.instantiate(getActivity(), TopFrag.class.getName());
             tx.add(R.id.tab_layout, top, "top");
         }
         if (mgr.findFragmentByTag("bottom") == null) {
+            bottom = (BottomFrag) Fragment.instantiate(getActivity(), BottomFrag.class.getName());
             tx.add(R.id.tab_layout, bottom, "bottom");
         }
         tx.commit();
